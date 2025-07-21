@@ -1,0 +1,80 @@
+/*=======================
+    Import Font
+=======================*/
+@font-face{
+	font-family: TenFutur;
+	src: url("../fonts/TenFuturaBooCy-Regular.otf");
+}
+
+/*=======================
+    Default CSS
+=======================*/
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background-color: #fff none repeat scroll 0% 0%; 
+  scroll-behavior: smooth;
+  overflow-x: hidden !important;
+  font-family: 'TenFutur', sans-serif;
+}
+
+section {
+  overflow: hidden;
+}
+
+ul li {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+a,
+a>* {
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/*=======================
+    Custom CSS
+=======================*/
+@scope (.chloe-form) {
+  select, input {
+    border-bottom: 1px solid gray;
+    padding: 10px 0px;
+    border-radius: 5px;
+  }
+
+  label:has(+ input:required)::after {
+    content: "*";
+    color: red;
+    margin-left: 5px;
+  }
+
+  fieldset {
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+}
+
+.chloe-form-wrapper {
+  scroll-margin-top: 150px;
+}
