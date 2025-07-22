@@ -33,9 +33,9 @@ cd chloe-paddington
 # 2) Install PHP dependencies (dotenv)
 composer require vlucas/phpdotenv --no-interaction
 
-# 3) Create your .env file (in project root)
+# 3) Copy example env and edit
 cp .env.example .env
-# then edit `.env` to match your local MySQL creds:
+# Edit `.env` to match your local MySQL creds:
 # DB_HOST=127.0.0.1
 # DB_NAME=paddington
 # DB_USER=root
