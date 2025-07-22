@@ -23,13 +23,15 @@
 </head>
 
 <body>
+    <!-- Header Section -->
     <section id="chloe-header">
         <div class="container">
             <header class="d-flex justify-content-center py-3">
-                <img class="img-fluid" src="/assets/img/chloe-logo.png" width="200" height="auto" alt="Chloe">
+                <img src="/assets/img/chloe-logo.png" alt="Chloe">
             </header>
         </div>
     </section>
+    <!-- Body Section: Form -->
     <section class="chloe-body py-5">
         <div class="container">
             <div class="row">
@@ -38,17 +40,17 @@
                         <img class="img-fluid" width="800" height="200" src="/assets/img/chloe-img1.webp" alt="Chloe Paddington Bag">
                     </div>
                     <div class="hero-title py-5">
-                        <h1 class="text-center text-uppercase">The Paddington Bag is back</h1>
+                        <h1 class="text-center text-uppercase display-3">The <br>Paddington Bag <br>is back</h1>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-10 offset-sm-1">
+                <div class="col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-10 offset-1">
                     <div class="chloe-form-wrapper">
                         <form class="chloe-form" action="submit.php" method="post">
                             <div class="mb-4 d-grid gap-3 text-left">
                                 <label for="title" class="text-muted">Title</label>
-                                <select name="title" id="title">
+                                <select name="title" id="title" required>
                                     <option value=""></option>
                                     <option>Mrs.</option>
                                     <option>Mr.</option>
@@ -74,7 +76,7 @@
                             <div class="mb-4 d-grid gap-3 text-left">
                                 <h5 class="text-muted">Select your preferred color</h5>
                                 <fieldset>
-                                    <?php foreach (['Black', 'Cream', 'Brown', 'Beige'] as $color): ?>
+                                    <?php foreach (['Black', 'Brown', 'Cream', 'Beige'] as $color): ?>
                                         <label class="text-muted">
                                             <input class="me-1" type="checkbox" name="preferred_colors[]" value="<?= htmlspecialchars($color) ?>">
                                             <?= htmlspecialchars($color) ?>
@@ -96,6 +98,7 @@
             </div>
         </div>
     </section>
+    <!-- 2up Image Section -->
     <section class="chloe-bottom py-5">
         <div class="container-fluid">
             <div class="row g-2">
@@ -109,6 +112,14 @@
         </div>
     </section>
 
+    <!-- Bootstrap JS Bundle -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-…"
+        crossorigin="anonymous">
+    </script>
+    <!-- Custom JS -->
     <script src="/assets/js/app.js" defer></script>
 </body>
+
 </html>

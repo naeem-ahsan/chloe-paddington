@@ -1,9 +1,10 @@
 /*=======================
     Import Font
 =======================*/
-@font-face{
-	font-family: TenFutur;
-	src: url("../fonts/TenFuturaBooCy-Regular.otf");
+@font-face {
+	font-family: 'TenFuturBooCy';
+	src: url("/fonts/TenFuturaBooCy-Regular.woff"),
+       url("/fonts/TenFuturaBooCy-Regular.woff2")
 }
 
 /*=======================
@@ -17,12 +18,15 @@
   box-sizing: border-box;
 }
 
-html, body {
+html {
   height: 100%;
-  background-color: #fff none repeat scroll 0% 0%; 
   scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'TenFuturBooCy', sans-serif;
   overflow-x: hidden !important;
-  font-family: 'TenFutur', sans-serif;
+  background-color: #fff none repeat scroll 0% 0%; 
 }
 
 section {
@@ -51,17 +55,29 @@ a:hover {
   text-decoration: none;
 }
 
+
+:is(h1, h2, h3, h4, h5, h6) {
+  font-family: 'TenFuturBooCy', sans-serif;
+}
+
 /*=======================
     Custom CSS
 =======================*/
-@scope (.chloe-form) {
+#chloe-header img {
+    max-width: 10rem;
+    width: 100%;
+    height: auto;
+}
+
+@scope (.chloe-form-wrapper) {
   select, input {
     border-bottom: 1px solid gray;
     padding: 10px 0px;
     border-radius: 5px;
   }
 
-  label:has(+ input:required)::after {
+  label:has(+ input:required)::after,
+  label:has(+ select:required)::after {
     content: "*";
     color: red;
     margin-left: 5px;
@@ -73,8 +89,23 @@ a:hover {
     grid-template-columns: 1fr 1fr;
     gap: 15px;
   }
+
+  .btn {
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    text-transform: uppercase;
+    font-size: 12px;
+    padding: 14px 30px;
+    font-family: 'Futura', sans-serif;
+    letter-spacing: 1px;
+    font-weight: 400;
+  } 
+
 }
 
 .chloe-form-wrapper {
-  scroll-margin-top: 150px;
+  scroll-margin-top: 350px;
 }
