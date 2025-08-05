@@ -3,15 +3,32 @@
 
 // Load Composer & .env
 require __DIR__ . '/vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-$host = getenv('DB_HOST');
+//--- load config file to load the .env variables
+require_once __DIR__ . '/config.php';
 
-// Grab DB creds from env
-$host = getenv('DB_HOST') ?: '127.0.0.1';
-$db   = getenv('DB_NAME') ?: 'paddington';
-$user = getenv('DB_USER') ?: 'root';
-$pass = getenv('DB_PASS') ?: '';
+$host = $_ENV['DB_HOST'];
+
+// Fetch admin creds from env
+$adminUser = $_ENV['ADMIN_USER'];
+$adminPass = $_ENV['ADMIN_PASS'];
+
+// HTTP-Basic auth handshake
+if (
+    !isset($_SERVER['PHP_AUTH_USER']) ||
+    $_SERVER['PHP_AUTH_USER'] !== $adminUser ||
+    $_SERVER['PHP_AUTH_PW']   !== $adminPass
+) {
+    header('WWW-Authenticate: Basic realm="Admin Area"');
+    header('HTTP/1.0 401 Unauthorized');
+    echo 'Authentication required.';
+    exit;
+}
+
+// Grab DB creds from SERVER
+$host = $_SERVER['DB_HOST'];
+$db   = $_SERVER['DB_NAME'];
+$user = $_SERVER['DB_USER'];
+$pass = $_SERVER['DB_PASS'];
 
 // Connect via PDO
 try {
@@ -32,7 +49,7 @@ try {
 
 // Fetch all entries, most recent first
 $stmt = $pdo->query("SELECT id, title, first_name, last_name, phone, email, preferred_colors, created_at
-                     FROM waitlist
+                     FROM chloe_waitlist
                      ORDER BY created_at DESC");
 $entries = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>

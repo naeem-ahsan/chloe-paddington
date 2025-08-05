@@ -7,11 +7,11 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 $host = getenv('DB_HOST');
 
-// Grab DB creds from env
-$host = getenv('DB_HOST') ?: '127.0.0.1';
-$db   = getenv('DB_NAME') ?: 'paddington';
-$user = getenv('DB_USER') ?: 'root';
-$pass = getenv('DB_PASS') ?: '';
+// Grab DB creds from SERVER variables
+$host = $_SERVER['DB_HOST'];
+$db   = $_SERVER['DB_NAME'];
+$user = $_SERVER['DB_USER'];
+$pass = $_SERVER['DB_PASS'];
 
 // Connect via PDO
 try {
@@ -34,13 +34,13 @@ try {
 // Fetch all entries
 $stmt = $pdo->query("
     SELECT id, title, first_name, last_name, phone, email, preferred_colors, created_at
-    FROM waitlist
+    FROM chloe_waitlist
     ORDER BY created_at DESC
 ");
 
 // Send CSV headers
 header('Content-Type: text/csv; charset=utf-8');
-header('Content-Disposition: attachment; filename="waitlist.csv"');
+header('Content-Disposition: attachment; filename="chloe_waitlist.csv"');
 
 // Open output stream & write rows
 $output = fopen('php://output', 'w');

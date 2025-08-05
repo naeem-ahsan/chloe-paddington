@@ -1,7 +1,6 @@
 <?php
 // index.php
 ?>
-<!doctype html>
 <html lang="en">
 
 <head>
@@ -19,7 +18,7 @@
         integrity="sha384-…"
         crossorigin="anonymous">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
 <body>
@@ -27,17 +26,17 @@
     <section id="chloe-header">
         <div class="container">
             <header class="d-flex justify-content-center py-3">
-                <img src="/assets/img/chloe-logo.png" alt="Chloe">
+                <img src="./assets/img/chloe-logo.png" alt="Chloe">
             </header>
         </div>
     </section>
     <!-- Body Section: Form -->
-    <section class="chloe-body py-5">
+    <section class="chloe-body py-3">
         <div class="container">
             <div class="row">
                 <div class="col-12 text-center">
                     <div class="hero-img">
-                        <img class="img-fluid" width="800" height="200" src="/assets/img/chloe-img1.webp" alt="Chloe Paddington Bag">
+                        <img class="img-fluid" width="800" height="200" src="./assets/img/chloe-img1.webp" alt="Chloe Paddington Bag">
                     </div>
                     <div class="hero-title py-5">
                         <h1 class="text-center text-uppercase display-3">The <br>Paddington Bag <br>is back</h1>
@@ -103,10 +102,10 @@
         <div class="container-fluid">
             <div class="row g-2">
                 <div class="col-6 h-100 overflow-hidden">
-                    <img src="/assets/img/chloe-img2.webp" class="w-100 h-100 object-fit-cover" alt="Chloe Paddington Bag 1">
+                    <img src="./assets/img/chloe-img2.webp" class="w-100 h-100 object-fit-cover" alt="Chloe Paddington Bag 1">
                 </div>
                 <div class="col-6 h-100 overflow-hidden">
-                    <img src="/assets/img/chloe-img3.webp" class="w-100 h-100 object-fit-cover" alt="Chloe Paddington Bag 2">
+                    <img src="./assets/img/chloe-img3.webp" class="w-100 h-100 object-fit-cover" alt="Chloe Paddington Bag 2">
                 </div>
             </div>
         </div>
@@ -119,7 +118,7 @@
         crossorigin="anonymous">
     </script>
     <!-- Custom JS -->
-    <script src="/assets/js/app.js" defer></script>
+    <script src="./assets/js/app.js" defer></script>
 </body>
 
 </html>

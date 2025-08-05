@@ -3,8 +3,8 @@
 =======================*/
 @font-face {
 	font-family: 'TenFuturBooCy';
-	src: url("/fonts/TenFuturaBooCy-Regular.woff"),
-       url("/fonts/TenFuturaBooCy-Regular.woff2")
+	src: url("/app/chloe-nl/fonts/TenFuturaBooCy-Regular.woff") format("woff"),
+       url("/app/chloe-nl/fonts/TenFuturaBooCy-Regular.woff2") format("woff2");
 }
 
 /*=======================

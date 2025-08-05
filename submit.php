@@ -1,87 +1,126 @@
 <?php
 // submit.php
 
-// Load Composer & .env
 require __DIR__ . '/vendor/autoload.php';
-Dotenv\Dotenv::createImmutable(__DIR__)->load();
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-// JSON response header
+//--- load config file to load the .env variables
+require_once __DIR__ . '/config.php'; 
+
+//--- JSON header
 header('Content-Type: application/json');
 
-// Grab DB creds from env
-$host = getenv('DB_HOST') ?: '127.0.0.1';
-$db   = getenv('DB_NAME') ?: 'paddington';
-$user = getenv('DB_USER') ?: 'root';
-$pass = getenv('DB_PASS') ?: '';
+// DB creds
+$host = $_SERVER['DB_HOST'];
+$db   = $_SERVER['DB_NAME'];
+$user = $_SERVER['DB_USER'];
+$pass = $_SERVER['DB_PASS'];
 
-// Connect via PDO
-try {
-    $pdo = new PDO(
-        "mysql:host={$host};dbname={$db};charset=utf8mb4",
-        $user,
-        $pass,
-        [ PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ]
-    );
-} catch (PDOException $e) {
-    error_log('[DB ERROR] ' . $e->getMessage());
-    echo json_encode([
-      'success' => false,
-      'message' => 'Server error. Please try again later.'
-    ]);
+if (! $host || ! $db || ! $user) {
+    error_log("Missing DB config: HOST={$host}, DB={$db}, USER={$user}");
+    echo json_encode(['success'=>false,'message'=>'Configuration error.']);
     exit;
 }
 
-// Required-fields check
-$required = ['title','first_name','last_name','phone','email'];
-foreach ($required as $f) {
-    if (empty($_POST[$f])) {
-        echo json_encode(['success'=>false,'message'=> ucfirst($f) . " is required."]);
-        exit;
-    }
+//--- Connect to DB
+try {
+    $pdo = new PDO(
+      "mysql:host={$host};dbname={$db};charset=utf8mb4",
+      $user,
+      $pass,
+      [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]
+    );
+} catch (PDOException $e) {
+    // Log and return the real message once, to see what’s wrong
+    error_log('[DB ERROR] '.$e->getMessage());
+    echo json_encode(['success'=>false,'message'=>$e->getMessage()]);
+    exit;
 }
 
-// title validation
+//--- Validation
+$required = ['title','first_name','last_name','phone','email'];
+foreach ($required as $f) {
+  if (empty($_POST[$f])) {
+    echo json_encode(['success'=>false,'message'=> ucfirst($f)." is required."]);
+    exit;
+  }
+}
 $allowedTitles = ['Mrs.','Mr.','Miss'];
 $title = trim($_POST['title']);
 if (! in_array($title, $allowedTitles, true)) {
-    echo json_encode([
-      'success' => false,
-      'message' => 'Invalid title selection.'
-    ]);
-    exit;
+  echo json_encode(['success'=>false,'message'=>'Invalid title.']);
+  exit;
 }
-
-// Email format
 $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
 if (! $email) {
-    echo json_encode(['success'=>false,'message'=>'Invalid email address.']);
-    exit;
+  echo json_encode(['success'=>false,'message'=>'Invalid email address.']);
+  exit;
 }
 
-// Preferred colors
 $allowedColors = ['Black','Cream','Brown','Beige'];
-$colors = array_filter(
-    (array)($_POST['preferred_colors'] ?? []),
-    fn($c)=> in_array($c, $allowedColors, true)
+$colors = array_filter((array)($_POST['preferred_colors'] ?? []),
+            fn($c)=> in_array($c,$allowedColors,true)
 );
 $colorList = implode(',', $colors);
 
-// Insert into database
+//--- Insert
 $stmt = $pdo->prepare("
-    INSERT INTO waitlist
+  INSERT INTO chloe_waitlist
     (title, first_name, last_name, phone, email, preferred_colors)
-    VALUES
-    (:title, :fn, :ln, :ph, :em, :pc)
+  VALUES
+    (:title,:fn,:ln,:ph,:em,:pc)
 ");
 $stmt->execute([
-    ':title' => $title,
-    ':fn'    => trim($_POST['first_name']),
-    ':ln'    => trim($_POST['last_name']),
-    ':ph'    => trim($_POST['phone']),
-    ':em'    => $email,
-    ':pc'    => $colorList,
+  ':title'=>$title,
+  ':fn'=>trim($_POST['first_name']),
+  ':ln'=>trim($_POST['last_name']),
+  ':ph'=>trim($_POST['phone']),
+  ':em'=>$email,
+  ':pc'=>$colorList,
 ]);
 
-// Success!
+//--- grab names for email
+$firstName = trim($_POST['first_name']);
+$lastName  = trim($_POST['last_name']);
+
+//--- HTML email
+$tmplPath = __DIR__.'/phpmailtemplate.html';
+if (file_exists($tmplPath)) {
+  $tpl = file_get_contents($tmplPath);
+  $htmlBody = strtr($tpl, [
+    '{{name}}'        => "$firstName $lastName",
+    '{{url}}'         => rtrim($_ENV['APP_URL'],'/').'/',
+    '{{supportMail}}' => getenv('SUPPORT_MAIL'),
+  ]);
+} else {
+  $htmlBody = "<p>Hi $firstName,</p><p>Thanks for joining our list!</p>";
+}
+
+//--- Send via PHPMailer
+try {
+  $mail = new PHPMailer(true);
+  $mail->CharSet = "UTF-8";
+  $mail->isSMTP();
+  $mail->Host       = $_SERVER['SMTP_HOST'];
+  $mail->SMTPAuth   = true;
+  $mail->Username   = $_SERVER['SMTP_USER'];
+  $mail->Password   = $_SERVER['SMTP_PASS'];
+  $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+  $mail->Port       = $_SERVER['SMTP_PORT'] ?: 587;
+
+  $mail->setFrom($_SERVER['SMTP_FROM'], $_SERVER['SMTP_FROM_NAME']);
+  $mail->addAddress($email, "$firstName $lastName");
+  $mail->isHTML(true);
+  $mail->Subject = 'You\'re on the list for the Paddington bag!';
+  $mail->Body    = $htmlBody;
+  $mail->AltBody = "Hi $firstName,\n\nThanks for joining!";
+
+  $mail->send();
+} catch (Exception $e) {
+  error_log('Mail error: '.$mail->ErrorInfo);
+}
+
+//--- Success!
 echo json_encode(['success'=>true]);
 exit;
