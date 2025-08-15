@@ -26,12 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         `;
 
-            wrapper.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+                    wrapper.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
 
-        } else {
+                } else {
                     // show error
                     alert(json.message);
                 }
@@ -41,4 +41,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Something went wrong. Please try again.');
             });
     });
+
+    // Admin.php: Email CSV export - Ajax success/error handling
+    // const form = document.getElementById('emailCsvForm');
+    // const btn = document.getElementById('emailCsvBtn');
+    // const spinner = btn.querySelector('.spinner-border');
+    // const label = btn.querySelector('.label');
+    // const toastEl = document.getElementById('emailToast');
+    // const toastBody = document.getElementById('emailToastBody');
+    // const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+
+    // form.addEventListener('submit', (e) => {
+    //     e.preventDefault();
+
+    //     // UI: disable + show spinner
+    //     btn.disabled = true;
+    //     spinner.classList.remove('d-none');
+    //     label.textContent = 'Sending…';
+
+    //     fetch(form.action, {
+    //         method: 'POST',
+    //         headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    //         body: new FormData(form)
+    //     })
+    //         .then(async (res) => {
+    //             const text = (await res.text()).trim();
+    //             if (!res.ok) throw new Error(text || 'Request failed');
+
+    //             // success toast
+    //             toastEl.classList.remove('text-bg-danger');
+    //             toastEl.classList.add('text-bg-success');
+    //             toastBody.textContent = text || 'Email sent!';
+    //             toast.show();
+    //         })
+    //         .catch(err => {
+    //             // error toast
+    //             toastEl.classList.remove('text-bg-success');
+    //             toastEl.classList.add('text-bg-danger');
+    //             toastBody.textContent = 'Failed to send email. ' + (err.message || '');
+    //             toast.show();
+    //         })
+    //         .finally(() => {
+    //             // reset UI
+    //             btn.disabled = false;
+    //             spinner.classList.add('d-none');
+    //             label.textContent = 'Send CSV';
+    //         });
+    // });
 });
